@@ -5,18 +5,18 @@ import { Line } from 'react-chartjs-2';
 
 // ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const NeuralNetworkBuilder = ({ data, inputFeatures, outputFeature, epochs }) => {  //* NeuralNetworkBuilder component | ACCEPTS: data, inputFeatures, and outputFeature, props + epochs
+const NeuralNetworkBuilder = ({ data, features, labels, epochs }) => {  //* NeuralNetworkBuilder component | ACCEPTS: data, features, and labels, props + epochs
     /* STATES */
     const [model, setModel] = useState(null); 
     const [trainingLog, setTrainingLog] = useState([]); 
 
     const trainModel = async () => {                                                                  //* trainModel function
-        const inputs = data.map((row) => inputFeatures.map((feature) => {
+        const inputs = data.map((row) => features.map((feature) => {
             const value = parseFloat(row[feature]);
             return isNaN(value) ? 0 : value; // Replace NaN with 0 or any other default value
         }));         // Extract the input features from the data
         const outputs = data.map((row) => {
-            const value = parseFloat(row[outputFeature]);
+            const value = parseFloat(row[labels]);
             return [isNaN(value) ? 0 : value]; // Replace NaN with 0 or any other default value
         });                                // Extract the output feature from the data
 
@@ -26,8 +26,9 @@ const NeuralNetworkBuilder = ({ data, inputFeatures, outputFeature, epochs }) =>
         const outputTensor = tf.tensor2d(outputs);                                                          // ^
 
 
+
         const nnModel = tf.sequential();                                                                    //* CREATE a sequential neural network model
-        nnModel.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [inputFeatures.length] }));    // Add a dense layer with 16 units and ReLU activation
+        nnModel.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [features.length] }));    // Add a dense layer with 16 units and ReLU activation
         nnModel.add(tf.layers.dense({ units: 1 }));                                                             // Add a dense layer with 1 unit
 
         nnModel.compile({                                                                                   //* COMPILE the model
@@ -57,7 +58,7 @@ const NeuralNetworkBuilder = ({ data, inputFeatures, outputFeature, epochs }) =>
             <h4 className='underline'>Training Log:</h4>
             <ul>
                 {trainingLog.map((log, index) => (                                                 // Map over the training log and display the epoch and loss
-                <li key={index}>Epoch {log.epoch + 1}/{epochs}: Loss = {log.loss.toFixed(4)}</li>    
+                <li key={index}>Epoch {log.epoch + 1}/{epochs}: Loss = {log.loss.toFixed(2)}</li>    
                 ))}
             </ul>
 

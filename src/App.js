@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 /* COMPONENTS */
+import Nav from './components/Nav';
 import FileUploader from './components/FileUploader'; 
 import FeatureSelector from './components/FeatureSelector'; 
 import NeuralNetworkBuilder from './components/NeuralNetworkBuilder';
@@ -11,6 +12,11 @@ const App = () => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
+
+  const [features, setFeatures] = useState([]);
+  const [labels, setLabels] = useState([]);
+  
+  
 
   /* //TODO: Advanced Options... */     
       //TODO: move to seperate component
@@ -45,55 +51,73 @@ const App = () => {
 
   //! ***
   return (
-    <div className='p-[20px]'>
-      <h1>CSV Neural Network Trainer</h1>
-      <FileUploader setData={setData} />  {/* Pass the setData function as a prop to FileUploader */}
+    <>
+      <Nav />
+      <div className='p-[20px]'>
+        <h1><strong>Neural Network Trainer</strong></h1>
+        <FileUploader setData={setData} />  {/* Pass the setData function as a prop to FileUploader */}
 
-      
-      {columns.length > 0 && (          //* Only render the FeatureSelector if columns have been loaded
-        <>
-          <FeatureSelector
-            columns={columns}                       // Pass these 3 props to the FeatureSelector component
-            selectedFeatures={selectedFeatures}       
-            setSelectedFeatures={setSelectedFeatures} 
-          />
-          {/*********** TODO: integrate advanced options below into seperate component ***********/}
-          
-          <div className='my-4'>
-            <label htmlFor='epochs' className='block text-sm font-medium text-gray-700'>
-              Number of Epochs
-            </label>
-            <input
-              type='number'
-              id='epochs'
-              name='epochs'
-              value={epochs}
-              onChange={handleEpochsChange}
-              className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+        
+        {columns.length > 0 && (          //* Only render the FeatureSelector if columns have been loaded
+          <>
+            <FeatureSelector
+              columns={columns}                       // Pass these 3 props to the FeatureSelector component
+              selectedFeatures={selectedFeatures}       
+              setSelectedFeatures={setSelectedFeatures} 
+              //
+              features={features}
+              setFeatures={setFeatures}
+              labels={labels}
+              setLabels={setLabels}
             />
-          </div>
-          
-        </>
-      )}
+            {/*********** TODO: integrate advanced options below into seperate component ***********/}
+            
+            <div className=''>
+              <label htmlFor='epochs' className='block text-sm font-medium text-gray-700'>
+                Number of Epochs
+              </label>
+              <input className='mt-1 block w-fit px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                type='number'
+                id='epochs'
+                name='epochs'
+                value={epochs}
+                onChange={handleEpochsChange}
+              />
+            </div>
+            
+          </>
+        )}
 
 
 
-      <ul className='list-disc pl-10'>
-        <li className='text-gray-400'>input features: {selectedFeatures.slice(0, -1).join(', ')}</li>
-        <li className='text-red-300'>output feature: {selectedFeatures[selectedFeatures.length - 1]}</li>
-        <br/>
-        <li></li>
-      </ul>
+        <ul className='list-disc pl-10'>
+          <li className='TOOLTIP text-gray-400 relative group w-fit cursor-help'>
+            features: {features.join(', ')}
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
+              independent variable(s) (input)
+            </div>
+          </li>
+          <li className='TOOLTIP text-red-300 relative group w-fit cursor-help'>
+            label: {labels.join(', ')}
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
+              dependent variable(s) (output)
+            </div>
+          </li>
+        </ul>
 
-      {selectedFeatures.length > 1 && ( //* Only render the NeuralNetworkBuilder if at least two features have been selected
-        <NeuralNetworkBuilder
-          data={data}                                                       // pass these 3 props to the NeuralNetworkBuilder component
-          inputFeatures={selectedFeatures.slice(0, -1)}                     // inputFeatures is an array of all but the last selected feature
-          outputFeature={selectedFeatures[selectedFeatures.length - 1]}     // outputFeature is the last selected feature
-          epochs={epochs}
-        />
-      )}
-    </div>
+        {selectedFeatures.length > 1 && ( //* Only render the NeuralNetworkBuilder if at least two features have been selected
+          <NeuralNetworkBuilder
+            data={data} 
+            features={features}                                                      // pass these 3 props to the NeuralNetworkBuilder component
+            // inputFeatures={selectedFeatures.slice(0, -1)}                     // inputFeatures is an array of all but the last selected feature
+            labels={labels}     // outputFeature is the last selected feature
+            epochs={epochs}
+          />
+        )}
+      </div>
+    </>
+
+
   );
 };
 
