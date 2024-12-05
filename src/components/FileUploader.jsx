@@ -4,14 +4,14 @@ import Papa from 'papaparse';
 
 
 
-const FileUploader = ({ setData }) => {     //* FileUploader component | ACCEPTS: setData prop
+const FileUploader = ({ setDB }) => {     //* FileUploader component | ACCEPTS: setDB prop
   const onDrop = (acceptedFiles) => {           // Callback function that runs when a file is dropped
     const file = acceptedFiles[0];                  // Get the first file from the array of accepted files
 
     Papa.parse(file, {                              // Parse the file using PapaParse
       header: true,                                     // Treat the first row as a header row
       dynamicTyping: true,                              // Convert strings to numbers if possible
-      complete: (result) => setData(result.data),       // Pass the data to the setData function
+      complete: (result) => setDB(result.data),       // Pass the data to the setDB function
     });
   };
 

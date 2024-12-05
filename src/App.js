@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 /* COMPONENTS */
 import Nav from './components/Nav';
 import FileUploader from './components/FileUploader'; 
 import FeatureSelector from './components/FeatureSelector'; 
 import NeuralNetworkBuilder from './components/NeuralNetworkBuilder';
-// import AdvancedOptions from './components/advancedOptions';
-
+import AdvancedOptions from './components/advancedOptions';
 
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [columns, setColumns] = useState([]);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [DB, setDB] = useState([]);
+  const [vars, setVars] = useState([]);
 
-  const [features, setFeatures] = useState([]);
-  const [labels, setLabels] = useState([]);
+  const [X, setX] = useState([]);
+  const [y, sety] = useState([]);
+
+  const [settings, setSettings] = useState({
+    imputer: "mean",      // Preprocessing
+    layers: [{            // Creation
+      units: 32, 
+      activation: "relu" 
+    }], 
+    loss: "mse",          // Compilation
+    optimizer: "adam",
+    batchSize: 32,        // Training
+    epochs: 10,
+  });
   
   
 
@@ -30,23 +40,23 @@ const App = () => {
   // const [loss, setLoss] = useState('meanSquaredError');
   // const [optimizer, setOptimizer] = useState('adam');
   /* TRAIN */
-  const [epochs, setEpochs] = useState(10);
+  // const [epochs, setEpochs] = useState(10);
 
-  const handleEpochsChange = (e) => {
-    setEpochs(e.target.value);
-  };
+  // const handleEpochsChange = (e) => {
+  //   setSettings({ ...settings, epochs: e.target.value });
+  // };
   /* ...END Advanced Options */
 
-  React.useEffect(() => {               
-    if (data.length > 0) {                // Check if data has been loaded
-      setColumns(Object.keys(data[0]));     // Extract the column names from the first row of the data
+  useEffect(() => {               
+    if (DB.length > 0) {                // Check if DB has been loaded
+      setVars(Object.keys(DB[0]));     // Extract the column names from the first row of the DB
     }
-  }, [data]);                             // Re-run this effect whenever the data changes
+  }, [DB]);                             // Re-run this effect whenever the DB changes
 
     // const inputFeatures=selectedFeatures.slice(0, -1); 
     // const outputFeature=selectedFeatures[selectedFeatures.length - 1];
-    // const inputs = data.map((row) => inputFeatures.map((feature) => parseFloat(row[feature])));         // Extract the input features from the data
-    // const outputs = data.map((row) => [parseFloat(row[outputFeature])]);                                // Extract the output feature from the data
+    // const inputs = DB.map((row) => inputFeatures.map((feature) => parseFloat(row[feature])));         // Extract the input features from the DB
+    // const outputs = DB.map((row) => [parseFloat(row[outputFeature])]);                                // Extract the output feature from the DB
 
 
   //! ***
@@ -54,64 +64,52 @@ const App = () => {
     <>
       <Nav />
       <div className='p-[20px]'>
-        <h1><strong>Neural Network Trainer</strong></h1>
-        <FileUploader setData={setData} />  {/* Pass the setData function as a prop to FileUploader */}
+        <h1 className=''><strong>Neural Network Trainer</strong></h1>
+        <FileUploader setDB={setDB} />  {/* Pass the setDB function as a prop to FileUploader */}
 
         
-        {columns.length > 0 && (          //* Only render the FeatureSelector if columns have been loaded
+        {vars.length > 0 && (          //* Only render the FeatureSelector if vars have been loaded
           <>
             <FeatureSelector
-              columns={columns}                       // Pass these 3 props to the FeatureSelector component
-              selectedFeatures={selectedFeatures}       
-              setSelectedFeatures={setSelectedFeatures} 
-              //
-              features={features}
-              setFeatures={setFeatures}
-              labels={labels}
-              setLabels={setLabels}
+              vars={vars}                       
+              X={X}
+              setX={setX}
+              y={y}
+              sety={sety}
+            />             
+
+            <ul className='pl-5'>
+              <li className='TOOLTIP text-gray-400 relative group w-fit cursor-help'>
+                features: {X.join(', ')}
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
+                  independent variable(s) (input)
+                </div>
+              </li>
+              <li className='TOOLTIP text-red-300 relative group w-fit cursor-help'>
+                label: {y.join(', ')}
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
+                  dependent variable(s) (output)
+                </div>
+              </li>
+            </ul>
+            <AdvancedOptions 
+              settings={settings} 
+              setSettings={setSettings} 
             />
-            {/*********** TODO: integrate advanced options below into seperate component ***********/}
-            
-            <div className=''>
-              <label htmlFor='epochs' className='block text-sm font-medium text-gray-700'>
-                Number of Epochs
-              </label>
-              <input className='mt-1 block w-fit px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                type='number'
-                id='epochs'
-                name='epochs'
-                value={epochs}
-                onChange={handleEpochsChange}
-              />
-            </div>
-            
           </>
         )}
 
 
 
-        <ul className='list-disc pl-10'>
-          <li className='TOOLTIP text-gray-400 relative group w-fit cursor-help'>
-            features: {features.join(', ')}
-            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
-              independent variable(s) (input)
-            </div>
-          </li>
-          <li className='TOOLTIP text-red-300 relative group w-fit cursor-help'>
-            label: {labels.join(', ')}
-            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-sm rounded px-2 py-1 text-center">
-              dependent variable(s) (output)
-            </div>
-          </li>
-        </ul>
 
-        {selectedFeatures.length > 1 && ( //* Only render the NeuralNetworkBuilder if at least two features have been selected
+
+        {X.length > 1 && ( //* Only render the NeuralNetworkBuilder if at least two features have been selected
           <NeuralNetworkBuilder
-            data={data} 
-            features={features}                                                      // pass these 3 props to the NeuralNetworkBuilder component
-            // inputFeatures={selectedFeatures.slice(0, -1)}                     // inputFeatures is an array of all but the last selected feature
-            labels={labels}     // outputFeature is the last selected feature
-            epochs={epochs}
+            DB={DB} 
+            X={X}                                                      // pass these 3 props to the NeuralNetworkBuilder component
+            y={y}     // outputFeature is the last selected feature
+            // epochs={settings.epochs}
+            advancedOptions={settings}
           />
         )}
       </div>
