@@ -7,11 +7,12 @@ import 'chart.js/auto';
 
 
 
-const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions }) => {  //* NeuralNetworkBuilder component | ACCEPTS: DB, X, and y, props + epochs
+const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions, hasTrained, setHasTrained }) => {  //* NeuralNetworkBuilder component | ACCEPTS: DB, X, and y, props + epochs
     /* STATES */
     const [model, setModel] = useState(null); 
     const [trainingLog, setTrainingLog] = useState([]); 
 
+    //* CHART OPTIONS
     const lossData = {
         labels: trainingLog.map((log) => log.epoch + 1),
         datasets: [
@@ -42,7 +43,7 @@ const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions }) => {  //* NeuralNet
         },
     };
 
-
+    //* TRAIN THE MODEL
     //TODO: add dynamic imputer for NaN values (instead of 0)
     const trainModel = async () => {                                                                  //* trainModel function
         const inputs = DB.map((row) => X.map((feature) => {    // Map over the DB and extract the input X
@@ -54,14 +55,11 @@ const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions }) => {  //* NeuralNet
             return [isNaN(value) ? 0 : value];                              // Replace NaN with 0 or any other default value
         });                                 // Extract the output feature from the DB
         
-        console.log("Inputs: " + inputs);
-        console.log("Outputs: " + outputs);
-
+        // console.log("Inputs: " + inputs);
+        // console.log("Outputs: " + outputs);
 
         const XTensor = tf.tensor2d(inputs);                                                            // Convert the input and output DB to tensors 
         const yTensor = tf.tensor2d(outputs);                                                          // ^
-
-
 
         const nnModel = tf.sequential();                                                                    //* CREATE a sequential neural network model
         nnModel.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [X.length] }));     // Add a dense layer with 16 units and ReLU activation
@@ -80,10 +78,22 @@ const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions }) => {  //* NeuralNet
                 onEpochEnd: (epoch, logs) => setTrainingLog((prev) => [...prev, { epoch, loss: logs.loss }]),   // Update the training log with the loss
             },
         });
-
-
-
+        
+        setHasTrained(true);                                                                                //* Set the hasTrained state to true
     };
+
+    // const predict = (inputData) => {
+    //     if (!model) {
+    //         alert("Model is not trained yet!");
+    //         return;
+    //     }
+
+    //     const inputTensor = tf.tensor2d([inputData]);
+    //     const prediction = model.predict(inputTensor);
+    //     prediction.array().then((array) => {
+    //         alert(`Predicted value: ${array[0][0]}`);
+    //     });
+    // };
 
 
   //! ***
@@ -104,7 +114,7 @@ const NeuralNetworkBuilder = ({ DB, X, y, advancedOptions }) => {  //* NeuralNet
                         <h4 className='underline'>Training Log:</h4>
                         <ul>
                             {trainingLog.map((log, index) => (                                                 // Map over the training log and display the epoch and loss
-                            <li key={index}>Epoch {log.epoch + 1}/{advancedOptions.epochs}: Loss = {log.loss.toFixed(2)}</li>    
+                            <li key={index}>Epoch <span className='text-[rgb(109,190,191)] bg-slate-100'>{log.epoch + 1}</span>/{advancedOptions.epochs}: Loss = {log.loss.toFixed(2)}</li>    
                             ))}
                         </ul>
                     </div>

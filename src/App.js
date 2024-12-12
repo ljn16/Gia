@@ -9,6 +9,7 @@ import AdvancedOptions from './components/advancedOptions';
 
 const App = () => {
   const [DB, setDB] = useState([]);
+  const [predictDB, setPredictDB] = useState([]);
   const [vars, setVars] = useState([]);
 
   const [X, setX] = useState([]);
@@ -26,6 +27,7 @@ const App = () => {
     epochs: 10,
   });
   
+  const [hasTrained, setHasTrained] = useState(false);
   
 
   /* //TODO: Advanced Options... */     
@@ -64,7 +66,7 @@ const App = () => {
     <>
       <Nav />
       <div className='p-[20px]'>
-        <h1 className=''><strong>Neural Network Trainer</strong></h1>
+        <h1 className='font-bold'>Train Neural Network</h1>
         <FileUploader setDB={setDB} />  {/* Pass the setDB function as a prop to FileUploader */}
 
         
@@ -110,9 +112,22 @@ const App = () => {
             y={y}     // outputFeature is the last selected feature
             // epochs={settings.epochs}
             advancedOptions={settings}
+            hasTrained={hasTrained}
+            setHasTrained={setHasTrained}
           />
         )}
+
+        
+        {hasTrained && ( //* Only render the NeuralNetworkBuilder if at least two features have been selected
+          <>
+            <h1 className='font-bold'>Predict Data</h1>
+            <FileUploader setPredictDB={setPredictDB}/>
+          </>
+        )}
+
+
       </div>
+
     </>
 
 

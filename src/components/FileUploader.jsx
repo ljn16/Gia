@@ -4,7 +4,7 @@ import Papa from 'papaparse';
 
 
 
-const FileUploader = ({ setDB }) => {     //* FileUploader component | ACCEPTS: setDB prop
+const FileUploader = ({ setDB, setPredictDB }) => {     //* FileUploader component | ACCEPTS: setDB prop
   const onDrop = (acceptedFiles) => {           // Callback function that runs when a file is dropped
     const file = acceptedFiles[0];                  // Get the first file from the array of accepted files
 
