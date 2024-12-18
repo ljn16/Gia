@@ -105,8 +105,8 @@ def train_model():
     #     }), 201
 
 
-@app.route('/api/download', methods=['GET'])                                                                      
-def download_model():
+# @app.route('/api/download', methods=['GET'])                                                                      
+# def download_model():
 
 
 

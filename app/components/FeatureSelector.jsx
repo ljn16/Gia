@@ -4,6 +4,7 @@ import Select from 'react-select';
 const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelector component | ACCEPTS: vars, selectedFeatures, and setSelectedFeatures props
   const handleChange = (selected) => {                                  // CB: that runs when the user makes a selection
     setX(selected.map((option) => option.value));           // Update the selected features when the user makes a selection
+
   };
   const handleLabelChange = (selected) => {                                  // CB: that runs when the user makes a selection
     sety(selected.map((option) => option.value));           // Update the selected features when the user makes a selection
@@ -70,6 +71,8 @@ const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelec
         isMulti                         // Allow multiple selections
         onChange={handleChange}         // Pass the handleChange function
         placeholder="Select at least 2 features..."  
+        isOptionDisabled={(option) => y.includes(option.value)}
+
       />
       <h3><span className='font-semibold'>Select Label </span><span className='text-gray-400'>(dependent variable)</span></h3>
       <Select  
@@ -78,6 +81,8 @@ const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelec
         isMulti                         // Allow multiple selections
         onChange={handleLabelChange}         // Pass the handleChange function
         placeholder="Select at least 1 label..."  
+        value={options.filter(option => y.includes(option.value))}
+        isOptionDisabled={(option) => X.includes(option.value)}
       />
     </div>
   );

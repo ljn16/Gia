@@ -14,7 +14,7 @@ import NeuralNetworkBE from './components/NeuralNetworkBE'
 
 export default function Home() {
   const [DB, setDB] = useState([]);
-  const [mlModel, setMlModel] = useState(null);
+  const [mlModel, setMlModel] = useState('neural_network');
   const [downloadedModel, setDownloadedModel] = useState(null);
   // const [predictDB, setPredictDB] = useState([]);
   const [vars, setVars] = useState<string[]>([]);
@@ -103,7 +103,6 @@ export default function Home() {
 
             />
 
-            {/* // DB, setDB, X, setX, y, setY, advancedOptions, setAdvancedOptions, trainingLog, setTrainingLog, hasTrained, setHasTrained */}
             {/* <NeuralNetworkBuilder
               DB={DB} 
               X={X}                                                      // pass these 3 props to the NeuralNetworkBuilder component
@@ -123,7 +122,6 @@ export default function Home() {
         {hasTrained && ( //* Render NeuralNetworkBuilder (if at least two features have been selected)
           <>
             <h1 className='font-bold'>Predict Data</h1>
-            {/* <FileUploader setPredictDB={setPredictDB}/> */}
           </>
         )}
 
