@@ -45,7 +45,8 @@ def train_model():
     DB = data.get('DB') # Get the database from the JSON data
     X = data.get('X')   # Get the features from the JSON data
     y = data.get('y')   # Get the target from the JSON data
-    advanced_options = data.get('advancedOptions')
+    advanced_options = data.get('advancedOptions') ##  ADVANCED OPTIONS:  {'imputer': 'mean', 'layers': [{'units': 16, 'activation': 'relu'}], 'loss': 'meanSquaredError', 'optimizer': 'adam', 'batchSize': 32, 'epochs': 10}
+
     inputs = data.get('inputs')
     outputs = data.get('outputs')
 
@@ -71,7 +72,8 @@ def train_model():
 
     # Define the model
     model = tf.keras.Sequential([
-        tf.keras.layers.Dense(16, activation='relu', input_shape=(len(X),)),
+        tf.keras.layers.Input(shape=(len(X),)),
+        tf.keras.layers.Dense(16, activation=advanced_options['layers'][0]['activation']),
         tf.keras.layers.Dense(1)
     ])
 
@@ -87,13 +89,14 @@ def train_model():
                 'epoch': epoch,
                 'loss': logs.get('loss')
             })
-            print('PROGRESS: ', epoch, ' ', logs.get('loss'))
+            # print('PROGRESS: ', epoch, ' ', logs.get('loss'))
 
     # Train the model with the provided number of epochs
     model.fit(X_np, y_np, epochs=advanced_options['epochs'], callbacks=[TrainingCallback()])
 
     # Save the model to a file
-    model.save('trained_model.h5')
+    model.save('trained_model.keras')
+
 
     # Return training log
     return jsonify({'training_log': training_log})

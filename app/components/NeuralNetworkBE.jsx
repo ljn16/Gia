@@ -109,7 +109,7 @@ const NeuralNetworkBE = ({ DB, setDB, X, setX, y, sety, advancedOptions, trainin
 
   //! ***
   return (
-    <div className="container">
+    <>
       <button onClick={handleTrainModel} className='train-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded'>
         Train Model
       </button>
@@ -132,21 +132,18 @@ const NeuralNetworkBE = ({ DB, setDB, X, setX, y, sety, advancedOptions, trainin
         </button>
       </div> */}
       {/* <EX/> */}
-                      <div className='flex'>
-                          <div className='bg-white w-fit mt-5'>
-                              <h4 className='underline'>Training Log:</h4>
-                              <ul>
-                                  {trainingLog.map((log, index) => (                                                 // Map over the training log and display the epoch and loss
-                                  <li key={index}>Epoch <span className='text-[rgb(109,190,191)] bg-slate-100'>{log.epoch + 1}</span>/{advancedOptions.epochs}: Loss = <span className='bg-slate-100'>{log.loss.toFixed(2)}</span></li>    
-                                  ))}
-                              </ul>
-                          </div>
-                          <div className='ml-10 h-[30vh] w-[60vw]'>
-                              <Line className='' data={lossData} options={lossOptions} />
-      
-                          </div>
-                      </div>
-    </div>
+      <div className='flex'>
+          <div className='bg-white w-fit mt-5'>
+              <h4 className='underline'>Training Log:</h4>
+              <ul>
+                  {trainingLog.map((log, index) => (                                                 // Map over the training log and display the epoch and loss
+                  <li key={index}>Epoch <span className='text-[rgb(109,190,191)] bg-slate-100'>{log.epoch + 1}</span>/{advancedOptions.epochs}: Loss = <span className='bg-slate-100'>{log.loss.toFixed(2)}</span></li>    
+                  ))}
+              </ul>
+          </div>
+          <div className='ml-10 h-[30vh] w-[60vw]'><Line className='' data={lossData} options={lossOptions} /></div>
+      </div>
+    </>
   );
 };
 
