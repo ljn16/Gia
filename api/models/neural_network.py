@@ -1,8 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
-from flask import Flask, jsonify, request
-from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
 import pandas as pd
