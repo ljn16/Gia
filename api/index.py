@@ -5,7 +5,7 @@ import tensorflow as tf
 import pandas as pd
 from sklearn.impute import SimpleImputer
 
-from models import neural_network
+from models import decision_tree, linear_reg, neural_network, random_forest
 
 
 app = Flask(__name__)
