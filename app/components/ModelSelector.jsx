@@ -21,6 +21,16 @@ const ModelSelector = ({setMlModel}) => {
                 placeholder='Select a Model Type' 
                 onChange={handleChange} 
                 defaultValue={options.find(option => option.value === 'neural_network')}
+                styles={{
+                    option: (provided) => ({
+                        ...provided,
+                        cursor: 'pointer',
+                    }),
+                    control: (provided) => ({
+                        ...provided,
+                        cursor: 'pointer',
+                    }),
+                }}
             />
     </>
   );

@@ -15,52 +15,56 @@ import 'chart.js/auto';
 
 const NeuralNetworkBE = ({ DB, setDB, X, setX, y, sety, advancedOptions, trainingLog, setTrainingLog, hasTrained, setHasTrained, downloadedModel, setDownloadedModel}) => {
 
-      //* CHART OPTIONS
-      const lossData = {
-        labels: trainingLog.map((log) => log.epoch + 1),
-        datasets: [
-            {
-                label: 'Loss per Epoch',
-                data: trainingLog.map((log) => log.loss),
-                borderColor: 'rgba(75,192,192,1)',
-                backgroundColor: 'rgba(75,192,192,0.2)',
-                fill: false,
-            },
-        ],
+    //* CHART OPTIONS
+    const lossData = {
+      labels: trainingLog.map((log) => log.epoch + 1),
+      datasets: [
+        {
+          label: 'Loss per Epoch',
+          data: trainingLog.map((log) => log.loss),
+          borderColor: 'rgba(75,192,192,1)',
+          backgroundColor: 'rgba(75,192,192,0.2)',
+          fill: false,
+        },
+      ],
     };
     
     const lossOptions = {
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Epoch',
-                },
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Loss',
-                },
-            },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Epoch',
+          },
         },
+        y: {
+          title: {
+            display: true,
+            text: 'Loss',
+          },
+        },
+      },
     };
 
   //*** [POST] ***
   const handleTrainModel = async () => {
     setTrainingLog([]); // Reset the training log
     const inputs = DB.map((row) => X.map((feature) => {    // Map over the DB and extract the input X
-        const value = parseFloat(row[feature]);                         // Convert the feature value to a float
-        const columnValues = DB.map((row) => parseFloat(row[feature])).filter((val) => !isNaN(val));
-        // const meanValue = columnValues.reduce((sum, val) => sum + val, 0) / columnValues.length;
-        // console.log(meanValue);
-        return isNaN(value) ? 0 : value;                                // Replace NaN with the mean of the column values
+        const value = row[feature]
+        // const value = parseFloat(row[feature]);                         // Convert the feature value to a float
+        // const columnValues = DB.map((row) => parseFloat(row[feature])).filter((val) => !isNaN(val)); 
+        // // const meanValue = columnValues.reduce((sum, val) => sum + val, 0) / columnValues.length;
+        // // console.log(meanValue);
+        // return isNaN(value) ? 0 : value;                                // Replace NaN with the mean of the column values
+        return value;
     }));                                // Extract the input X from the DB
     const outputs = DB.map((row) => {                             // Map over the DB and extract the output feature
-        const value = parseFloat(row[y]);                          // Convert the feature value to a float
+      const value = row[y];
+        // const value = parseFloat(row[y]);                          // Convert the feature value to a float
         // const columnValues = DB.map((row) => parseFloat(row[feature])).filter((val) => !isNaN(val));
         // const meanValue = columnValues.reduce((sum, val) => sum + val, 0) / columnValues.length;
-        return [isNaN(value) ? 0 : value];                              // Replace NaN with the mean of the column values
+        // return [isNaN(value) ? 0 : value];                              // Replace NaN with the mean of the column values
+        return value;
     });                                 // Extract the output feature from the DB
     try {
       setTrainingLog([]); // Clear previous logs
