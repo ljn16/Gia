@@ -8,11 +8,7 @@ from sklearn.impute import SimpleImputer
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/api/myGetReq", methods=["GET"])
-def get_example():
-    return jsonify({"message": "Get!"})
-
-@app.route('/api/train', methods=['POST'])                                                                      
+@app.route('/api/train-nn', methods=['POST'])                                                                      
 def train_model():
     global model, training_log 
     data = request.json # Get the JSON data from the request

@@ -68,7 +68,7 @@ const NeuralNetworkBE = ({ DB, setDB, X, setX, y, sety, advancedOptions, trainin
     });                                 // Extract the output feature from the DB
     try {
       setTrainingLog([]); // Clear previous logs
-      const response = await axios.post("/api/train", {
+      const response = await axios.post("/api/train-nn", {
         DB,
         X,
         y,
