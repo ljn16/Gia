@@ -14,8 +14,8 @@ def train_model():
     data = request.json # Get the JSON data from the request
     DB = data.get('DB') # Get the database from the JSON data
     feat_cols = data.get('X')   # Get the features from the JSON data
-    label_cols = data.get('y')   # Get the target from the JSON data
-    advanced_options = data.get('advancedOptions') ##  ADVANCED OPTIONS:  {'imputer': 'mean', 'layers': [{'units': 16, 'activation': 'relu'}], 'loss': 'meanSquaredError', 'optimizer': 'adam', 'batchSize': 32, 'epochs': 10}
+    label_cols = data.get('y')   # Get the label from the JSON data
+    advanced_options = data.get('advancedOptions') ### {'imputer': 'mean', 'layers': [{'units': 16, 'activation': 'relu'}], 'loss': 'meanSquaredError', 'optimizer': 'adam', 'batchSize': 32, 'epochs': 10}
     
 
     # Convert DB (JSON) into a pandas DataFrame
@@ -93,7 +93,6 @@ def train_model():
 
     # Save the model to a file
     model.save('trained_model.keras')
-
 
     # Return training log
     return jsonify({'training_log': training_log})
