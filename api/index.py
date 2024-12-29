@@ -51,10 +51,9 @@ def train():
     print('label_cols: ', label_cols)   
     
 
-    DF_mod = DF#.dropna(axis=0)                         # Drop rows with missing values
-    # DF_mod = DF_mod.select_dtypes(exclude=['object']) # Drop non-numeric columns
+    DF_mod = DF                                   #copy the dataframe                    
 
-    # IMPUTE missing values
+    # IMPUTE
     imputer = SimpleImputer(strategy=FE_data.get('settings')['imputer'])
     DF_mod[feat_cols] = imputer.fit_transform(DF_mod[feat_cols]) 
     DF_mod.dropna(axis=0, inplace=True)
