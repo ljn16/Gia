@@ -10,7 +10,7 @@ CORS(app)
 
 @app.route('/api/train-nn', methods=['POST'])                                                                      
 def train_model():
-    global model, training_log 
+    global model, training_log
     data = request.json # Get the JSON data from the request
     DB = data.get('DB') # Get the database from the JSON data
     feat_cols = data.get('X')   # Get the features from the JSON data

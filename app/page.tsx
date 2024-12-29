@@ -8,6 +8,9 @@ import AdvancedOptionsML from "./components/subcomponents/advancedOptionsML";
 import ModelSelector from "./components/ModelSelector";
 import NeuralNetworkBE from "./components/models/NeuralNetworkBE";
 import DecisionTree from './components/models/DecisionTree';
+
+import Train from "./components/Train";
+import Predict from "./components/Predict";
   //  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 //
 //
@@ -93,6 +96,14 @@ export default function Home() {
           <NeuralNetworkBE DB={DB} setDB={setDB} X={X} setX={setX} y={y} sety={sety} advancedOptions={settings} trainingLog={trainingLog} setTrainingLog={setTrainingLog} hasTrained={hasTrained} setHasTrained={setHasTrained} downloadedModel={downloadedModel} setDownloadedModel={setDownloadedModel}/>
         )}
       </div>
+
+      {/* 
+       */}
+       {/* 
+        */}
+      <Train />
+      <Predict />
+
     </>
   );
 

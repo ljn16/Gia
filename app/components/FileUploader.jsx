@@ -7,7 +7,7 @@ import Papa from 'papaparse';
 const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader component | ACCEPTS: setDB prop
   const [fileSelected, setFileSelected] = React.useState(false);
   const [fileName, setFileName] = React.useState('')
-
+  
   const onDrop = (acceptedFiles) => {           // Callback function that runs when a file is dropped
     const file = acceptedFiles[0];                  // Get the first file from the array of accepted files
     setFileSelected(true);                              // Set the fileSelected state to true
@@ -17,6 +17,22 @@ const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader
       header: true,                                     // Treat the first row as a header row
       dynamicTyping: true,                              // Convert strings to numbers if possible
       complete: (result) => setDB(result.data),       // Pass the data to the setDB function
+    });
+
+    
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('File successfully uploaded:', data);
+    })
+    .catch(error => {
+      console.error('Error uploading file:', error);
     });
   };
 

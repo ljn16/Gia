@@ -10,6 +10,10 @@ app = Flask(__name__)
 CORS(app)
 #  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 
+# model = None
+# feature_columns = []
+
+
 
 #? *** TRAIN ***
 @app.route('/api/train-nn', methods=['POST'])  
@@ -24,6 +28,69 @@ def train_model_dt():
 # @app.route('/api/predict-nn', methods=['POST'])  
 # @app.route('/api/train-dt', methods=['POST'])  
 
+@app.route('/api/train', methods=['POST'])
+def train():
+    # global model, feature_columns, training_log
+    # data = request.json                         # Get the JSON data from the request
+    # DB = data.get('DB')                         # Get the database from the JSON data
+    # feat_cols = data.get('X')                   # Get the features from the JSON data
+    # label_cols = data.get('y')                  # Get the label from the JSON data
+
+    # DB_data = pd.DataFrame(DB)#.select_dtypes(exclude=['object'])
+    # DB_data = DB_data.dropna(axis=0)
+
+    # X = DB_data[feat_cols]
+    # y = DB_data[label_cols]
+
+    # file = request.files['file']
+    # data = pd.read_csv(file)
+    # target_column = request.form['target_column']
+
+    # # Separate features and target
+    # X = data.drop(columns=[target_column])
+    # y = data[target_column]
+
+    # # Save feature columns
+    # feature_columns = list(X.columns)
+
+    # # Train-Test Split
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # # Train Decision Tree
+    # clf = DecisionTreeClassifier()
+    # clf.fit(X_train, y_train)
+
+    # # Calculate loss
+    # y_pred_proba = clf.predict_proba(X_test)
+    # loss = log_loss(y_test, y_pred_proba)
+
+    # # Store the model
+    # model = clf
+
+    # return jsonify({'loss': loss})
+    return jsonify({'message': 'it works'})
+
+
+@app.route('/api/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files: # Check if the file is in the request
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files['file'] # Get the file from the request
+
+    if file.filename == '': # Check if the file has a name
+        return jsonify({"error": "No file selected"}), 400
+
+    try:
+        # Process the CSV file
+        # global_df = pd.read_csv(file)
+        global global_df
+        global_df = pd.read_csv(file)
+        df = global_df
+        # Example: return first 5 rows as JSON
+        return jsonify(df.head().to_dict(orient="records"))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
