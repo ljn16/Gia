@@ -27,6 +27,9 @@ export default function Home() {
   const [X, setX] = useState([]);
   const [y, sety] = useState([]);
   const [settings, setSettings] = useState({
+    imputer: "mean", // Preprocessing
+    loss: "meanSquaredError", // Compilation
+
     // TODO: make model specific
     tree : {
       randomForest : {
@@ -44,9 +47,7 @@ export default function Home() {
       ],
     },
 
-    imputer: "mean", // Preprocessing
 
-    loss: "meanSquaredError", // Compilation
     optimizer: "adam",
     batchSize: 32, // Training
   });
@@ -64,7 +65,7 @@ export default function Home() {
   //
   const handleBEreq = async () => {
     try {
-      const response = await axios.post('/api/train-tree', {DB, X, y});
+      const response = await axios.post('/api/train-tree', {DB, X, y, settings});
       console.log(response.data);
     } catch (error) {
       console.error(error);

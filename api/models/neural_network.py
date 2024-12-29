@@ -20,7 +20,7 @@ def train_model():
 
     # Convert DB (JSON) into a pandas DataFrame
     DB_data = pd.DataFrame(DB)#.select_dtypes(exclude=['object'])
-    print('DB_data: ', DB_data)
+    # print('DB_data: ', DB_data)
 
     DB_train = DB_data.sample(frac=0.7, random_state=0)
     DB_valid = DB_data.drop(DB_train.index)

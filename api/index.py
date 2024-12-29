@@ -25,7 +25,8 @@ def upload_file():
     try:
         global DF
         DF = pd.read_csv(file)
-        return jsonify(DF.to_dict(orient="records")) # Convert the DataFrame to a dictionary and return it as JSON 
+        DF = DF.select_dtypes(exclude=['object'])       # Drop non-numeric columns
+        return jsonify(DF.to_dict(orient="records"))    # Convert the DataFrame to a dictionary and return it as JSON 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -49,12 +50,19 @@ def train():
     print('feat_cols: ', feat_cols)     
     print('label_cols: ', label_cols)   
     
-    DF_mod = DF.dropna(axis=0)                    # Drop rows with missing values
-    # DF_mod = DF_mod.select_dtypes(exclude=['object']) # Drop non-numeric columns
-    # print('DF_mod: ', DF_mod)
 
-    X = DF_mod[feat_cols]                  # Features
-    y = DF_mod[label_cols]                 # Label             
+    DF_mod = DF#.dropna(axis=0)                         # Drop rows with missing values
+    # DF_mod = DF_mod.select_dtypes(exclude=['object']) # Drop non-numeric columns
+
+    # IMPUTE missing values
+    imputer = SimpleImputer(strategy=FE_data.get('settings')['imputer'])
+    DF_mod[feat_cols] = imputer.fit_transform(DF_mod[feat_cols]) 
+    DF_mod.dropna(axis=0, inplace=True)
+    print('DF_mod: ', DF_mod)
+
+
+    X = DF_mod[feat_cols]                       # Features
+    y = DF_mod[label_cols]      # Label             
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
