@@ -13,9 +13,6 @@ app = Flask(__name__)
 CORS(app)
 #  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 
-# model = None
-# feature_columns = []
-
 #? *** UPLOAD ***
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
@@ -32,6 +29,7 @@ def upload_file():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 #? *** TRAIN ***
 @app.route('/api/train-nn', methods=['POST'])  
 def train_model():
@@ -41,10 +39,7 @@ def train_model():
 def train_model_dt():
     return decision_tree.train_model(); 
 
-#? (cont...)
-
-#* PREPROCESSING, TRAINING, AND PREDICTION
-@app.route('/api/train', methods=['POST'])
+@app.route('/api/train-tree', methods=['POST'])
 def train():
     print('working')
 
@@ -54,51 +49,29 @@ def train():
     print('feat_cols: ', feat_cols)     
     print('label_cols: ', label_cols)   
     
-    
     DF_mod = DF.dropna(axis=0)                    # Drop rows with missing values
     # DF_mod = DF_mod.select_dtypes(exclude=['object']) # Drop non-numeric columns
     # print('DF_mod: ', DF_mod)
 
-
-    # # Separate features and label
     X = DF_mod[feat_cols]                  # Features
-    y = DF_mod[label_cols]                 # Label
-    print('X: ', X)
-    print('y: ', y)
+    y = DF_mod[label_cols]                 # Label             
 
-    # # Save feature columns
-    # feature_columns = list(X.columns)                      
-
-    # # Train-Test Split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # # Train Decision Tree
     tree_model = DecisionTreeRegressor()
     tree_model.fit(X_train, y_train)
 
-    # # Calculate loss
+    # Calculate loss
     y_predict = tree_model.predict(X_test)
     loss = mean_squared_error(y_test, y_predict)
 
     # # Store the model
-    # model = clf
+    # stored_model = tree_model
 
     return jsonify({'loss': loss})
 
 
-
-
-
-
-
-
-
-
-
-
-#? *** PREDICT ***
-# @app.route('/api/predict-nn', methods=['POST'])  
-# @app.route('/api/train-dt', methods=['POST'])  
 
 
 

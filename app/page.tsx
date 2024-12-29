@@ -64,7 +64,7 @@ export default function Home() {
   //
   const handleBEreq = async () => {
     try {
-      const response = await axios.post('/api/train', {DB, X, y});
+      const response = await axios.post('/api/train-tree', {DB, X, y});
       console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -75,6 +75,8 @@ export default function Home() {
   return (
     <>
       <Nav />
+      <button onClick={handleBEreq} className="border bg-red-600 text-white rounded p-5">BE test</button>
+
       <div className="p-[20px]">
         <div className={`p-5 ${DB.length > 0 ? "bg-green-100" : "bg-gray-100"}`}>
           <FileUploader DB={DB} setDB={setDB} />
@@ -114,7 +116,6 @@ export default function Home() {
        */}
        {/* 
         */}
-      <button onClick={handleBEreq}>BE req</button>
 
       <Train />
       <Predict />
