@@ -4,7 +4,7 @@ import Papa from 'papaparse';
 
 
 
-const FileUploader = ({ setDB, /* setPredictDB */ }) => {     //* FileUploader component | ACCEPTS: setDB prop
+const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader component | ACCEPTS: setDB prop
   const [fileSelected, setFileSelected] = React.useState(false);
   const [fileName, setFileName] = React.useState('')
 
@@ -26,13 +26,17 @@ const FileUploader = ({ setDB, /* setPredictDB */ }) => {     //* FileUploader c
   
   //! ***
   return (
-    <div 
-      className={`border-2 border-dashed p-5 cursor-pointer ${fileSelected ? 'border-green-500' : 'border-gray-300'}`}
-      {...getRootProps()}
-    >
-      <input {...getInputProps()} />
-      <p className="text-center">{fileSelected ? <><span className='text-green-500 underline'>{fileName} </span><span>uploaded</span><span className='text-gray-400 '> {'('}click to select a different file{')'}</span></> : 'Drag & drop a CSV file here, or click to select one'}</p>
-    </div>
+    <>
+      <h1 className="font-bold">Upload Dataset</h1>
+      
+      <div 
+        className={`border-2 border-dashed p-5 cursor-pointer ${fileSelected ? 'border-green-500' : 'border-gray-300'}`}
+        {...getRootProps()}
+      >
+        <input {...getInputProps()} />
+        <p className="text-center">{fileSelected ? <><span className='text-green-500 underline'>{fileName} </span><span>uploaded</span><span className='text-gray-400 '> {'('}click to select a different file{')'}</span></> : 'Drag & drop a CSV file here, or click to select one'}</p>
+      </div>
+    </>
   );
 };
 

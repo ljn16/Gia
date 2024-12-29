@@ -67,7 +67,7 @@ def train_model():
     # Define the model
     model = tf.keras.Sequential([
         tf.keras.layers.Input(shape=(len(feat_cols),)),
-        tf.keras.layers.Dense(16, activation=advanced_options['layers'][0]['activation']),
+        tf.keras.layers.Dense(16, activation=advanced_options['nn']['layers'][0]['activation']),
         tf.keras.layers.Dense(1)
     ])
 
@@ -87,7 +87,7 @@ def train_model():
     # Train the model with the provided number of epochs
     model.fit(
         X_np, y_np,
-        epochs=int(advanced_options['epochs']), 
+        epochs=int(advanced_options['nn']['epochs']), 
         callbacks=[TrainingCallback()]
     )
 

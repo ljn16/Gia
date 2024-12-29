@@ -29,7 +29,7 @@ const AdvancedOptions = ({ settings, setSettings }) => {  //* AdvancedOptions co
                 <div className='flex w-fit'>
                 <button
                     onClick={() => {
-                      const newLayers = [...settings.layers];
+                      const newLayers = [...settings.nn.layers];
                       newLayers.pop();
                       setSettings({ ...settings, layers: newLayers });
                     }}
@@ -38,14 +38,14 @@ const AdvancedOptions = ({ settings, setSettings }) => {  //* AdvancedOptions co
                     -
                   </button>
                   <button
-                    onClick={() => setSettings({ ...settings, layers: [...settings.layers, { units: 32, activation: 'relu' }] })}
+                    onClick={() => setSettings({ ...settings, layers: [...settings.nn.layers, { units: 32, activation: 'relu' }] })}
                     className='bg-green-500 text-white text-sm px-4 py-2 rounded-r-md mr-4'
                   >
                     +
                   </button>
                 </div>
 
-                {settings.layers.map((layer, index) => (
+                {settings.nn.layers.map((layer, index) => (
                   <div key={index} className='mt-2'>
                     <h4>Layer {index + 1}</h4>
                     <div className='flex w-fit items-center'>
@@ -56,7 +56,7 @@ const AdvancedOptions = ({ settings, setSettings }) => {  //* AdvancedOptions co
                         name={`units-${index}`}
                         value={layer.units}
                         onChange={(e) => {
-                          const newLayers = [...settings.layers];
+                          const newLayers = [...settings.nn.layers];
                           newLayers[index].units = e.target.value;
                           setSettings({ ...settings, layers: newLayers });
                         }}
@@ -70,7 +70,7 @@ const AdvancedOptions = ({ settings, setSettings }) => {  //* AdvancedOptions co
                         name={`activation-${index}`}
                         value={layer.activation}
                         onChange={(e) => {
-                          const newLayers = [...settings.layers];
+                          const newLayers = [...settings.nn.layers];
                           newLayers[index].activation = e.target.value;
                           setSettings({ ...settings, layers: newLayers });
                         }}

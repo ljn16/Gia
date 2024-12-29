@@ -12,6 +12,7 @@ import DecisionTree from './components/models/DecisionTree';
 //
 //
 export default function Home() {
+
   const [DB, setDB] = useState([]);
   const [mlModel, setMlModel] = useState("neural_network");
   const [downloadedModel, setDownloadedModel] = useState(null);
@@ -22,113 +23,86 @@ export default function Home() {
   const [X, setX] = useState([]);
   const [y, sety] = useState([]);
   const [settings, setSettings] = useState({
+    // TODO: make model specific
+    tree : {
+      randomForest : {
+        maxLeafs: 10
+      }
+    },
+    nn : {
+      epochs: 10,
+      layers: [
+        {
+          // Creation
+          units: 16,
+          activation: "relu",
+        },
+      ],
+    },
+
     imputer: "mean", // Preprocessing
-    layers: [
-      {
-        // Creation
-        units: 16,
-        activation: "relu",
-      },
-    ],
+
     loss: "meanSquaredError", // Compilation
     optimizer: "adam",
     batchSize: 32, // Training
-    epochs: 10,
   });
-  const [advancedOptionsML, setAdvancedOptionsML] = useState({
-    imputer: "mean",
-    loss: "meanSquaredError",
-    maxLeafs: 10
-  })
+
 
 
   useEffect(() => {
-    if (DB.length > 0) {        // Check if DB has been loaded
-      setVars(Object.keys(DB[0])); // Extract the column names from the first row of the DB
+    if (DB.length > 0) {            // Check if DB has been loaded
+      setVars(Object.keys(DB[0]));    // Extract the column names from the first row of the DB
     }
-  }, [DB]); // Re-run this effect whenever the DB changes
+  }, [DB]); // Re-run whenever the DB changes
 
   //! ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
   return (
     <>
       <Nav />
       <div className="p-[20px]">
-        <h1 className="font-bold">Upload Dataset</h1>
-        <FileUploader setDB={setDB} />
-        <ModelSelector setMlModel={setMlModel} />
+        <div className={`p-5 ${DB.length > 0 ? "bg-green-100" : "bg-gray-100"}`}>
+          <FileUploader DB={DB} setDB={setDB} />
+          <ModelSelector setMlModel={setMlModel} />
+        </div>
 
-        {/* //? DECISION TREE Model   ***   ***   ***/}
-        {mlModel === "decision_tree" && vars.length > 0 && ( //* Render when CSV is uploaded
-            <>
-              <br/><hr /><br/>
-              <FeatureSelector
-                DB={DB}
-                vars={vars}
-                X={X}
-                setX={setX}
-                y={y}
-                sety={sety}
-              />
-              <AdvancedOptionsML settings={settings} setSettings={setSettings} />
-            </>
-          )}
-        {X.length > 1 && ( //* Render when label (X) is selected
+
+        {/* //? -------------------------------------- DECISION TREE Model --------------------------------------   */}
+        {/* RENDER <selector> <options> when CSV uploaded */}
+        {mlModel === "decision_tree" && vars.length > 0 && (
           <>
-            <DecisionTree
-              DB={DB}
-              setDB={setDB}
-              X={X}
-              setX={setX}
-              y={y}
-              sety={sety}
-              advancedOptions={settings}
-              trainingLog={trainingLog}
-              setTrainingLog={setTrainingLog}
-              hasTrained={hasTrained}
-              setHasTrained={setHasTrained}
-              downloadedModel={downloadedModel}
-              setDownloadedModel={setDownloadedModel}
-              loss={loss}
-              setLoss={setLoss}
-            />
+            <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety}/>
+            <AdvancedOptions settings={settings} setSettings={setSettings} />
+            {/* <AdvancedOptionsML settings={settingsML} setSettings={setSettingsML} /> */}
           </>
         )}
-
-        {/* //? NEURAL NETWORK Model   ***   ***   ***/}
-        {mlModel === "neural_network" && vars.length > 0 && ( 
-            <>
-              <br /> <hr /> <br />
-              <FeatureSelector
-                DB={DB}
-                vars={vars}
-                X={X}
-                setX={setX}
-                y={y}
-                sety={sety}
-              />
-              <AdvancedOptions settings={settings} setSettings={setSettings} />
-            </>
-          )}
+        {/* RENDER <model> when label (X) is selected */}
         {X.length > 1 && ( 
+          <DecisionTree DB={DB} setDB={setDB} X={X} setX={setX} y={y} sety={sety} advancedOptions={settings} trainingLog={trainingLog} setTrainingLog={setTrainingLog} hasTrained={hasTrained} setHasTrained={setHasTrained} downloadedModel={downloadedModel} setDownloadedModel={setDownloadedModel} loss={loss} setLoss={setLoss}/>
+        )}
+
+        {/* //? -------------------------------------- NEURAL NETWORK Model --------------------------------------  */}
+        {/* RENDER <selector> <options> when CSV uploaded */}
+        {mlModel === "neural_network" && vars.length > 0 && ( 
           <>
-            <NeuralNetworkBE
-              DB={DB}
-              setDB={setDB}
-              X={X}
-              setX={setX}
-              y={y}
-              sety={sety}
-              advancedOptions={settings}
-              trainingLog={trainingLog}
-              setTrainingLog={setTrainingLog}
-              hasTrained={hasTrained}
-              setHasTrained={setHasTrained}
-              downloadedModel={downloadedModel}
-              setDownloadedModel={setDownloadedModel}
-            />
+            <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety} />
+            <AdvancedOptions settings={settings} setSettings={setSettings} />
           </>
+        )}
+        {/* RENDER <model> when label (X) is selected */}
+        {X.length > 1 && ( 
+          <NeuralNetworkBE DB={DB} setDB={setDB} X={X} setX={setX} y={y} sety={sety} advancedOptions={settings} trainingLog={trainingLog} setTrainingLog={setTrainingLog} hasTrained={hasTrained} setHasTrained={setHasTrained} downloadedModel={downloadedModel} setDownloadedModel={setDownloadedModel}/>
         )}
       </div>
     </>
   );
+
+  // return (
+  //   <>
+  //     <Nav />
+  //     <div className="p-[20px]">
+  //       <Train />
+  //       <Predict />
+  //     </div>
+  //   </>
+  // );
 }

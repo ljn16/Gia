@@ -5,47 +5,26 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 //  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 
-const DecisionTree = ({
-  DB,
-  setDB,
-  X,
-  setX,
-  y,
-  sety,
-  advancedOptions,
-  trainingLog,
-  setTrainingLog,
-  hasTrained,
-  setHasTrained,
-  downloadedModel,
-  setDownloadedModel,
-  loss,
-  setLoss
-}) => {
+const DecisionTree = ({DB, setDB, X, setX, y, sety, advancedOptions, trainingLog, setTrainingLog, hasTrained, setHasTrained, downloadedModel, setDownloadedModel, loss, setLoss}) => {
   //*** [POST] ***
   const handleTrainModel = async () => {
-
-    const inputs = DB.map((row) =>
+    /* MAP INPUTS from FB */
+    const inputs = DB.map((row) =>  
       X.map((feature) => {
         const value = row[feature];
         return value;
       })
     ); 
+    /* MAP OUTPUT from DB */
     const outputs = DB.map((row) => {
-      // Map over the DB and extract the output feature
       const value = row[y];
       return value;
-    }); // Extract the output feature from the DB
+    });
+
     try {
       setTrainingLog([]); // Clear previous logs
-      const response = await axios.post("/api/train-nn", {
-        DB,
-        X,
-        y,
-        advancedOptions,
-        inputs,
-        outputs,
-      });
+      /* [POST] req */
+      const response = await axios.post("/api/train-nn", {DB, X, y, advancedOptions, inputs, outputs,});
 
       setTrainingLog(response.data.training_log);
       setHasTrained(true);
@@ -59,22 +38,19 @@ const DecisionTree = ({
   //! ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
   return (
     <>
-      <button
-        onClick={handleTrainModel}
-        className="train-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-      >
+      <button onClick={handleTrainModel} className="train-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
         Train Model
       </button>
-
 
       <div className="flex">
         <div className="bg-white w-fit mt-5">
           <h4 className="underline">Training Log:</h4>
           <ul>
+            {/* Map over the training log and display the epoch and loss */}
             {trainingLog.map(
               (
                 log,
-                index // Map over the training log and display the epoch and loss
+                index 
               ) => (
                 <li key={index}>
                   Epoch{" "}

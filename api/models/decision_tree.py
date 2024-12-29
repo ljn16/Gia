@@ -7,7 +7,7 @@ import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
-# *****
+#  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 
 @app.route('/api/train-dt', methods=['POST'])  
 def train_model_dt():                                                                  
@@ -24,6 +24,9 @@ def train_model_dt():
 
     X = DB_data[feat_cols]
     y = DB_data[label_cols]
+
+    print('DB: ', DB)
+    print('DB_data: ', DB_)
 
     train_X, val_X, train_y, val_y = train_test_split(X, y,random_state = 0)
 
@@ -52,6 +55,6 @@ def train_model_dt():
 
 
 
-# *****
+#!  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
 if __name__ == '__main__':
     app.run(debug=True, port=5328)

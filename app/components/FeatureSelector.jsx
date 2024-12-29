@@ -2,9 +2,10 @@ import React from 'react';
 import Select from 'react-select';
 
 const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelector component | ACCEPTS: vars, selectedFeatures, and setSelectedFeatures props
+  
+
   const handleChange = (selected) => {                                  // CB: that runs when the user makes a selection
     setX(selected.map((option) => option.value));           // Update the selected features when the user makes a selection
-
   };
   const handleLabelChange = (selected) => {                                  // CB: that runs when the user makes a selection
     sety(selected.map((option) => option.value));           // Update the selected features when the user makes a selection
@@ -24,41 +25,29 @@ const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelec
     });
   };
 
-  const handleDoubleClick = (col) => {
-    sety((prevy) => {
-      if (prevy.includes(col)) {
-        return prevy.filter((label) => label !== col);
-      } else {
-        return [...prevy, col];
-      }
-    });
-  }
+  // const handleDoubleClick = (col) => {
+  //   sety((prevy) => {
+  //     if (prevy.includes(col)) {
+  //       return prevy.filter((label) => label !== col);
+  //     } else {
+  //       return [...prevy, col];
+  //     }
+  //   });
+  // }
 
   return (
-    <div className=''>
+    <div className='my-5'>
       <label className='font-semibold'>Columns ({vars.length})</label>
-      <button 
-        onClick={() => setX([])} 
-        className='ml-2 px-1 bg-red-500 text-white text-sm rounded-l'
-      >
+      <button onClick={() => setX([])} className='ml-2 px-1 bg-red-500 text-white text-sm rounded-l'>
         Remove All
       </button>
-      <button 
-        onClick={() => setX(vars)} 
-        className=' px-1 bg-green-500 text-white text-sm rounded-r'
-      >
+      <button onClick={() => setX(vars)} className=' px-1 bg-green-500 text-white text-sm rounded-r'>
         Add All
       </button>
 
       <div className='flex flex-wrap'>
         {vars.map((col, index) => (
-          <div 
-            key={index} 
-            className={`border p-2 m-1  ${X.includes(col) ? 'bg-gray-300' : ''} ${y.includes(col) ? 'bg-red-300' : ''}`} 
-            // onClick={() => handleColumnClick(col)}
-            // onDoubleClick={() => handleDoubleClick(col)}
-            // style={{ backgroundColor: X.includes(col) ? 'light-gray' : y.includes(col) ? 'red' : 'inherit' }}
-          >
+          <div key={index} className={`border p-2 m-1  ${X.includes(col) ? 'bg-gray-300' : ''} ${y.includes(col) ? 'bg-red-300' : ''}`} >
             {col/*  + ' (' + typeof col + ')' */} {/* TODO: add column type (must unconvert from all str) */}
           </div>
         ))}
