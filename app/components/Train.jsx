@@ -7,36 +7,12 @@ const Train = () => {
   const [loss, setLoss] = useState(null);
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // const formData = new FormData();
     // formData.append('file', file);
     // formData.append('target_column', targetColumn);
 
-        /* MAP INPUTS from FB */
-        const inputs = DB.map((row) =>  
-          X.map((feature) => {
-            const value = row[feature];
-            return value;
-          })
-        ); 
-        /* MAP OUTPUT from DB */
-        const outputs = DB.map((row) => {
-          const value = row[y];
-          return value;
-        });
-    
-        try {
-          setTrainingLog([]); // Clear previous logs
-          /* [POST] req */
-          const response = await axios.post('/api/train', {DB, X, y, advancedOptions, inputs, outputs,});
-    
-          setTrainingLog(response.data.training_log);
-          setHasTrained(true);
-          console.log("POSTED TO MODEL");
-          setDownloadedModel(response.downloadedModel);
-        } catch (error) {
-          console.error("Error training the model:", error);
-        }
+
 
     // 
     // 
@@ -44,7 +20,6 @@ const Train = () => {
 
     try {
       const response = await axios.post('/api/train', {DB, X, y, advancedOptions, inputs, outputs,});
-      //replaced formData with {DB, X, y, advancedOptions, inputs, outputs,}
       setLoss(response.data.loss); 
     } catch (error) {
       console.error(error);

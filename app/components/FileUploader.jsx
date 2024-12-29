@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import Papa from 'papaparse';
+import axios from 'axios';
 
 
 
@@ -8,7 +9,7 @@ const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader
   const [fileSelected, setFileSelected] = React.useState(false);
   const [fileName, setFileName] = React.useState('')
   
-  const onDrop = (acceptedFiles) => {           // Callback function that runs when a file is dropped
+  const onDrop = async (acceptedFiles) => {           // Callback function that runs when a file is dropped
     const file = acceptedFiles[0];                  // Get the first file from the array of accepted files
     setFileSelected(true);                              // Set the fileSelected state to true
     setFileName(acceptedFiles[0].name)
@@ -20,23 +21,18 @@ const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader
     });
 
     
-    const formData = new FormData();
-    formData.append('file', file);
+    const formData = new FormData();               // Create a new FormData object
+    formData.append('file', file);               
 
-    fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('File successfully uploaded:', data);
-    })
-    .catch(error => {
+    try {
+      const response = await axios.post('/api/upload', formData);
+      console.log('File successfully uploaded:', response.data);
+    } catch (error) {
       console.error('Error uploading file:', error);
-    });
+    }
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });  // Get the root and input props from useDropzone
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });  // Get the root and input props from useDropzone 
 
 
   

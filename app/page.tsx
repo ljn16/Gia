@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Nav from "./components/Nav";
 import FileUploader from "./components/FileUploader";
 import FeatureSelector from "./components/FeatureSelector";
@@ -58,6 +59,18 @@ export default function Home() {
     }
   }, [DB]); // Re-run whenever the DB changes
 
+  //
+  //
+  //
+  const handleBEreq = async () => {
+    try {
+      const response = await axios.post('/api/train', {DB, X, y});
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   //! ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
   return (
     <>
@@ -101,6 +114,8 @@ export default function Home() {
        */}
        {/* 
         */}
+      <button onClick={handleBEreq}>BE req</button>
+
       <Train />
       <Predict />
 
