@@ -75,7 +75,7 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <button onClick={handleBEreq} className="border bg-red-600 text-white rounded p-5">BE test</button>
+      <button onClick={handleBEreq} className="border bg-red-400 text-white rounded p-5 w-full">test BE</button>
 
       <div className="p-[20px]">
         <div className={`p-5 ${DB.length > 0 ? "bg-green-100" : "bg-gray-100"}`}>
@@ -84,19 +84,10 @@ export default function Home() {
         </div>
 
 
+
         {/* //? -------------------------------------- DECISION TREE Model --------------------------------------   */}
         {/* RENDER <selector> <options> when CSV uploaded */}
-        {mlModel === "decision_tree" && vars.length > 0 && (
-          <>
-            <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety}/>
-            <AdvancedOptions settings={settings} setSettings={setSettings} />
-            {/* <AdvancedOptionsML settings={settingsML} setSettings={setSettingsML} /> */}
-          </>
-        )}
-        {/* RENDER <model> when label (X) is selected */}
-        {X.length > 1 && ( 
-          <DecisionTree DB={DB} setDB={setDB} X={X} setX={setX} y={y} sety={sety} advancedOptions={settings} trainingLog={trainingLog} setTrainingLog={setTrainingLog} hasTrained={hasTrained} setHasTrained={setHasTrained} downloadedModel={downloadedModel} setDownloadedModel={setDownloadedModel} loss={loss} setLoss={setLoss}/>
-        )}
+
 
         {/* //? -------------------------------------- NEURAL NETWORK Model --------------------------------------  */}
         {/* RENDER <selector> <options> when CSV uploaded */}
@@ -117,8 +108,8 @@ export default function Home() {
        {/* 
         */}
 
-      <Train />
-      <Predict />
+      {/* <Train />
+      <Predict /> */}
 
     </>
   );
