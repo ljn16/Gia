@@ -1,13 +1,44 @@
-import React from 'react';
+import { useState } from "react";
+import axios from "axios";
 
+export default function Predict() {
+  const [file, setFile] = useState(null);
+  const [downloadLink, setDownloadLink] = useState("");
 
-const Predict = () => {
-    return (
-        <div>
-            <h1 className='font-bold'>Predict</h1>
-           
-        </div>
-    );
-};
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
-export default Predict;
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) return alert("Please upload a file first.");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setDownloadLink(response.data.download_url);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleUpload}>
+        <input type="file" accept=".csv" onChange={handleFileChange} />
+        <button type="submit">Upload and Predict</button>
+      </form>
+      {downloadLink && (
+        <a href={downloadLink} download>
+          Download Predicted File
+        </a>
+      )}
+    </div>
+  );
+}

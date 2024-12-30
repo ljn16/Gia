@@ -1,17 +1,25 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 import numpy as np
 import tensorflow as tf
 import pandas as pd
 from sklearn.impute import SimpleImputer
 from models import decision_tree, neural_network
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
+import joblib  # Import joblib to save the model to a file
+import pickle
+
 
 app = Flask(__name__)
 CORS(app)
 #  ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   ***   *** 
+loss_functions = {
+    'mean_squared_error': mean_squared_error,
+    'mean_absolute_error': mean_absolute_error
+}
+
 
 #? *** UPLOAD ***
 @app.route('/api/upload', methods=['POST'])
@@ -36,50 +44,84 @@ def upload_file():
 def train_model():
     return neural_network.train_model();                                                                    
 
-@app.route('/api/train-dt', methods=['POST'])  
-def train_model_dt():
-    return decision_tree.train_model(); 
+# @app.route('/api/train-dt', methods=['POST'])  
+# def train_model_dt():
+#     return decision_tree.train_model(); 
 
 @app.route('/api/train-tree', methods=['POST'])
-def train():
+def train_tree():
     print('working')
 
     FE_data = request.json                        # Get the JSON data from the request
     feat_cols = FE_data.get('X')                   # Get the features from the JSON data
     label_cols = FE_data.get('y')                  # Get the label from the JSON data
-    print('feat_cols: ', feat_cols)     
-    print('label_cols: ', label_cols)   
+    # print('feat_cols: ', feat_cols)     
+    # print('label_cols: ', label_cols)   
     
-
     DF_mod = DF                                   #copy the dataframe                    
 
-    # IMPUTE
+    #* PREPROCESS
     imputer = SimpleImputer(strategy=FE_data.get('settings')['imputer'])
     DF_mod[feat_cols] = imputer.fit_transform(DF_mod[feat_cols]) 
     DF_mod.dropna(axis=0, inplace=True)
-    print('DF_mod: ', DF_mod)
-
+    # print('DF_mod: ', DF_mod)
 
     X = DF_mod[feat_cols]                       # Features
-    y = DF_mod[label_cols]      # Label             
+    y = DF_mod[label_cols]                      # Label             
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # # Train Decision Tree
+    #* TRAIN
+    global tree_model
     tree_model = DecisionTreeRegressor()
     tree_model.fit(X_train, y_train)
 
-    # Calculate loss
+    #* COMPILATION
     y_predict = tree_model.predict(X_test)
-    loss = mean_squared_error(y_test, y_predict)
+    if FE_data.get('settings')['loss'] == 'mean_absolute_error':
+        loss = mean_absolute_error(y_test, y_predict)
+    else:
+        loss = mean_squared_error(y_test, y_predict)
 
-    # # Store the model
-    # stored_model = tree_model
+    #* SAVE MODEL
+    joblib.dump(tree_model, 'model.pkl')
 
     return jsonify({'loss': loss})
 
 
+#
+#
+#
+# Load your pre-trained model
+# model = joblib.load("model.pkl")
 
+@app.route('/api/predict-tree', methods=['POST'])
+def upload_file_to_predict():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    
+    if file:
+        # Read the uploaded CSV
+        data = pd.read_csv(file)
+        
+        # Predict using the model
+        if 'X' in data.columns:  # Ensure necessary columns are present
+            data['y_pred'] = tree_model.predict(data[['X']])
+            output_path = 'predicted_output.csv'
+            data.to_csv(output_path, index=False)
+
+            # Provide download link
+            return jsonify({"download_url": f"api/download/{output_path}"})
+        else:
+            return jsonify({"error": "Invalid CSV format. Column 'X' not found."}), 400
+
+@app.route('/api/download/<path:filename>', methods=['GET'])
+def download_file(filename):
+    return send_file(filename, as_attachment=True)
 
 
 

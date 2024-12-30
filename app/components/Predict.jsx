@@ -1,35 +1,46 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
-const Predict = () => {
+export default function FileUpload() {
   const [file, setFile] = useState(null);
-  const [predictions, setPredictions] = useState(null);
+  const [downloadLink, setDownloadLink] = useState("");
 
-  const handleSubmit = async (e) => {
-    // e.preventDefault();               // Prevent the default form submission
-    // const formData = new FormData();  // Create a new FormData object
-    // formData.append('file', file);    // Append the file to the FormData object
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (!file) return alert("Please upload a file first.");
+
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      const response = await axios.post('/api/predict', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const response = await axios.post("/api/predict-tree", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-      setPredictions(response.data.predictions);
+      // setDownloadLink(response.data.download_url);
+      console.log('Predict file successfully uploaded:'/* , response.data */);
+
     } catch (error) {
-      console.error(error);
+      console.error("Error uploading file:", error);
     }
   };
 
   return (
     <div>
-      <h2>Make Predictions</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
-        <button type="submit">Predict</button>
+      <form onSubmit={handleUpload}>
+        <input type="file" accept=".csv" onChange={handleFileChange} />
+        <button type="submit" className="border text-white bg-blue-500 rounded p-1">Upload and Predict</button>
       </form>
-      {predictions && <p>Predictions: {predictions.join(', ')}</p>}
+      {downloadLink && (
+        <a href={downloadLink} download>
+          Download Predicted File
+        </a>
+      )}
     </div>
   );
-};
-
-export default Predict;
+}

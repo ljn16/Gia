@@ -28,7 +28,7 @@ export default function Home() {
   const [y, sety] = useState([]);
   const [settings, setSettings] = useState({
     imputer: "mean", // Preprocessing
-    loss: "meanSquaredError", // Compilation
+    loss: "mean_squared_error", // Compilation
 
     // TODO: make model specific
     tree : {
@@ -96,6 +96,7 @@ export default function Home() {
           <>
             <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety} />
             <AdvancedOptions settings={settings} setSettings={setSettings} />
+            <Predict />
           </>
         )}
         {/* RENDER <model> when label (X) is selected */}
