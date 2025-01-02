@@ -14,65 +14,65 @@ const FeatureSelector = ({ DB, vars, X, setX, y, sety }) => {   //* FeatureSelec
   const options = vars.map((col) => ({ value: col, label: col }));   // Convert the vars to an array of objects with value and label properties
 
   //! ***
-  const handleColumnClick = (col) => {
-    // handleChange([{ value: col, label: col }]);
-    setX((prevFeatures) => {
-      if (prevFeatures.includes(col)) {
-        return prevFeatures.filter((feature) => feature !== col);
-      } else {
-        return [...prevFeatures, col];
-      }     
-    });
-  };
-
-  // const handleDoubleClick = (col) => {
-  //   sety((prevy) => {
-  //     if (prevy.includes(col)) {
-  //       return prevy.filter((label) => label !== col);
-  //     } else {
-  //       return [...prevy, col];
-  //     }
-  //   });
-  // }
 
   return (
     <div className='my-5'>
-      <label className='font-semibold'>Columns ({vars.length})</label>
-      <button onClick={() => setX([])} className='ml-2 px-1 bg-red-500 text-white text-sm rounded-l'>
-        Remove All
-      </button>
-      <button onClick={() => setX(vars)} className=' px-1 bg-green-500 text-white text-sm rounded-r'>
-        Add All
-      </button>
-
-      <div className='flex flex-wrap'>
-        {vars.map((col, index) => (
-          <div key={index} className={`border p-2 m-1  ${X.includes(col) ? 'bg-gray-300' : ''} ${y.includes(col) ? 'bg-red-300' : ''}`} >
-            {col/*  + ' (' + typeof col + ')' */} {/* TODO: add column type (must unconvert from all str) */}
-          </div>
-        ))}
+            <div className='flex flex-wrap justify-center items-center'>
+              <div className="flex flex-wrap">
+                {vars.map((col, index) => (
+            <div key={index} className={`border p-2 m-2 rounded-sm shadow-sm ${X.includes(col) ? 'border-gray-200 bg-gray-100' : ''} ${y.includes(col) ? 'border-orange-200 text-orange-700 bg-orange-100' : ''}`}>
+              {col}
+                  </div>
+                ))}
+              </div>
+            </div>
+      <div className='flex justify-center items-center'>
+        <div className='flex flex-col mr-5 items-center'>
+          <h3><span className='font-semibold'>Features</span> <span className='text-gray-400'>(independent)</span></h3>
+          <Select   
+            className='w-fit'
+            options={options}               
+            isMulti                         
+            onChange={handleChange}         
+            placeholder="Select at least 2 features..."  
+            isOptionDisabled={(option) => y.includes(option.value)}
+            styles={{
+              option: (provided, state) => ({
+                  ...provided,
+                  cursor: 'pointer',
+                ...(state.isSelected && { border: '1px solid #FDBA74', color: '#C2410C', backgroundColor: '#FFEDD5' }),
+              }),
+              control: (provided) => ({
+                  ...provided,
+                  cursor: 'pointer',
+              }),
+          }}
+          />
+        </div>
+        <div className='flex flex-col mr-5 items-center '>
+          <h3><span className='font-semibold '>Label </span><span className='text-gray-400'>(dependent)</span></h3>
+          <Select  
+            className='w-fit ' 
+            options={options}                       
+            isMulti                                 
+            onChange={handleLabelChange}            
+            placeholder="Select at least 1 label..."  
+            value={options.filter(option => y.includes(option.value))}
+            isOptionDisabled={(option) => X.includes(option.value)}
+            styles={{
+              option: (provided, state) => ({
+                  ...provided,
+                  cursor: 'pointer',
+                ...(state.isSelected && { border: '1px solid #FDBA74', color: '#C2410C', backgroundColor: '#FFEDD5' }),
+              }),
+              control: (provided) => ({
+                  ...provided,
+                  cursor: 'pointer',
+              }),
+          }}
+          />
+        </div>
       </div>
-
-      <h3><span className='font-semibold'>Select Features</span> <span className='text-gray-400'>(independent variables)</span></h3>
-      <Select   
-        className='w-fit'
-        options={options}               // Pass the options
-        isMulti                         // Allow multiple selections
-        onChange={handleChange}         // Pass the handleChange function
-        placeholder="Select at least 2 features..."  
-        isOptionDisabled={(option) => y.includes(option.value)}
-
-      />
-      <h3><span className='font-semibold'>Select Label </span><span className='text-gray-400'>(dependent variable)</span></h3>
-      <Select  
-        className='w-fit' 
-        options={options}               // Pass the options
-        isMulti                         // Allow multiple selections
-        onChange={handleLabelChange}         // Pass the handleChange function
-        placeholder="Select at least 1 label..."  
-        value={options.filter(option => y.includes(option.value))}
-        isOptionDisabled={(option) => X.includes(option.value)}
-      />
     </div>
   );
 };

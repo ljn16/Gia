@@ -26,7 +26,7 @@ def train_model_dt():
     y = DB_data[label_cols]
 
     print('DB: ', DB)
-    print('DB_data: ', DB_)
+    # print('DB_data: ', DB_)
 
     train_X, val_X, train_y, val_y = train_test_split(X, y,random_state = 0)
 

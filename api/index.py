@@ -53,6 +53,7 @@ def train_tree():
     print('working')
 
     FE_data = request.json                        # Get the JSON data from the request
+    global feat_cols, label_cols
     feat_cols = FE_data.get('X')                   # Get the features from the JSON data
     label_cols = FE_data.get('y')                  # Get the label from the JSON data
     # print('feat_cols: ', feat_cols)     
@@ -83,6 +84,8 @@ def train_tree():
     else:
         loss = mean_squared_error(y_test, y_predict)
 
+
+
     #* SAVE MODEL
     joblib.dump(tree_model, 'model.pkl')
 
@@ -95,33 +98,45 @@ def train_tree():
 # Load your pre-trained model
 # model = joblib.load("model.pkl")
 
-@app.route('/api/predict-tree', methods=['POST'])
-def upload_file_to_predict():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
+@app.route('/api/predict', methods=['POST'])
+def predict():
+    data = request.json                       # Get the JSON data from the request
     
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+    print(data)  # Print the received data
+    print('//')
+
+    # # Load the pre-trained model
+    # # model = joblib.load("model.pkl")
+
+    # # Extract features from the received data
+    features = pd.DataFrame([data])
+    print('features: ', features)
+    print('//')
+
+
+    # print('label_cols: ', label_cols)
+    predicted_value = tree_model.predict(features)
     
-    if file:
-        # Read the uploaded CSV
-        data = pd.read_csv(file)
-        
-        # Predict using the model
-        if 'X' in data.columns:  # Ensure necessary columns are present
-            data['y_pred'] = tree_model.predict(data[['X']])
-            output_path = 'predicted_output.csv'
-            data.to_csv(output_path, index=False)
+    print('predicted_value: ', predicted_value)
 
-            # Provide download link
-            return jsonify({"download_url": f"api/download/{output_path}"})
-        else:
-            return jsonify({"error": "Invalid CSV format. Column 'X' not found."}), 400
 
-@app.route('/api/download/<path:filename>', methods=['GET'])
-def download_file(filename):
-    return send_file(filename, as_attachment=True)
+    # # Make predictions
+    # # predictions = model.predict(features)
+
+    # print('Inputs:', inputs)
+    # return jsonify({'inputs': inputs})
+
+
+
+    # Convert the predicted value to a list
+    predicted_value_list = predicted_value.tolist()
+
+    return jsonify({'prediction': predicted_value_list})
+
+
+# @app.route('/api/download/<path:filename>', methods=['GET'])
+# def download_file(filename):
+#     return send_file(filename, as_attachment=True)
 
 
 

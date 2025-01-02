@@ -5,7 +5,7 @@ const ModelSelector = ({setMlModel}) => {
     const options = [
         // { value: 'linear_regression', label: 'Linear Regression', isDisabled: true },
         { value: 'decision_tree', label: 'Decision Tree', isDisabled: false },
-        { value: 'random_forest', label: 'Random Forest', isDisabled: true },
+        // { value: 'random_forest', label: 'Random Forest', isDisabled: true },
         { value: 'neural_network', label: 'Neural Network', isDisabled: false },
     ];
 
@@ -16,24 +16,25 @@ const ModelSelector = ({setMlModel}) => {
   return (
     <>
         <br/>
-        <h1 className="font-bold">Choose Model</h1>
-
-        <Select 
-            options={options} 
-            placeholder='Select a Model Type' 
-            onChange={handleChange} 
-            defaultValue={options.find(option => option.value === 'neural_network')}
-            styles={{
-                option: (provided) => ({
-                    ...provided,
-                    cursor: 'pointer',
-                }),
-                control: (provided) => ({
-                    ...provided,
-                    cursor: 'pointer',
-                }),
-            }}
-        />
+        <div className='flex items-center mb-5'>
+            <h1 className="font-bold">Model</h1>
+            <Select className='flex-grow pl-1'
+                options={options} 
+                placeholder='Select a Model Type' 
+                onChange={handleChange} 
+                defaultValue={options.find(option => option.value === 'neural_network')}
+                styles={{
+                    option: (provided) => ({
+                        ...provided,
+                        cursor: 'pointer',
+                    }),
+                    control: (provided) => ({
+                        ...provided,
+                        cursor: 'pointer',
+                    }),
+                }}
+            />
+        </div>
     </>
   );
 };
