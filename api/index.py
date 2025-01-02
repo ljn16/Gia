@@ -8,6 +8,7 @@ from models import decision_tree, neural_network
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 import joblib  # Import joblib to save the model to a file
 import pickle
 
