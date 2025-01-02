@@ -31,7 +31,7 @@ export default function Home() {
     imputer: "mean",              // Preprocessing
     loss: "mean_squared_error",   // Compilation
     tree : {
-      maxLeafNodes: 0,
+      maxLeafNodes: 2,
       useRandomForest: false,
       randomForest : {
 
@@ -86,10 +86,10 @@ export default function Home() {
         <ModelSelector setMlModel={setMlModel}/>
         
         <div className={`p-5 ${DB.length > 0 ? "bg-green-100" : "bg-gray-100"}`}>
-          <FileUploader DB={DB} setDB={setDB} />
+          <FileUploader DB={DB} setDB={setDB} setSettings={setSettings} settings={settings}/>
         </div>
 
-        {mlModel === "neural_network" && vars.length > 0 && (   /* RENDER <selector> <options> when CSV uploaded */
+        {mlModel === "decision_tree" && vars.length > 0 && (   /* RENDER <selector> <options> when CSV uploaded */
           <>
             <div className="flex justify-center w-full h-full my-5 p-5 shadow-lg">
               <div className=''>

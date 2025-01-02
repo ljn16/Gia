@@ -5,13 +5,14 @@ export default function Settings ({ settings, setSettings, mlModel }) {
 
   const toggleAccordion = () => setIsOpen(!isOpen);
 
+
   return (
     <div className="border border-gray-300 rounded-md mb-4 w-1/4">
         <div className={`flex justify-between items-center p-4 bg-gray-100 rounded-md cursor-pointer ${isOpen ? 'h-fit' : 'h-full'}`} onClick={toggleAccordion}>
         <h3 className="font-semibold"><span>{isOpen ? "▼" : "▶"}</span> <span>Advanced Settings</span></h3>
       </div>
 
-        {isOpen && mlModel === "neural_network" && (  /* 'decision_tree' */
+        {isOpen && mlModel === "decision_tree" && (  /* 'decision_tree' */
             <>
             <div className='p-4 bg-gray-50 rounded-md'>
                 {/*//? PREPROCESSING */}
@@ -53,7 +54,7 @@ export default function Settings ({ settings, setSettings, mlModel }) {
                         id='maxLeafNodes'
                         name='maxLeafNodes'
                         value={settings.tree.maxLeafNodes}
-                        onChange={(e) => setSettings({ ...settings, maxLeafNodes: e.target.value })}
+                        onChange={(e) => setSettings({ ...settings, tree: { ...settings.tree, maxLeafNodes: e.target.value } })}
                     />
                 </div>
 
