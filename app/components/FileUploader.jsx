@@ -5,9 +5,10 @@ import axios from 'axios';
 
 
 
-const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader component | ACCEPTS: setDB prop
+const FileUploader = ({ setDB, DB, setSettings, settings/* setPredictDB */ }) => {     //* FileUploader component | ACCEPTS: setDB prop
   const [fileSelected, setFileSelected] = React.useState(false);
   const [fileName, setFileName] = React.useState('')
+  // const [maxLeafNodes, setMaxLeafNodes] = React.useState(2);
   
   const onDrop = async (acceptedFiles) => {           // Callback function that runs when a file is dropped
     const file = acceptedFiles[0];                  // Get the first file from the array of accepted files
@@ -23,9 +24,11 @@ const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader
     
     const formData = new FormData();               // Create a new FormData object
     formData.append('file', file);               
+  
 
     try {
       const response = await axios.post('/api/upload', formData);
+      // setSettings.tree.maxLeafNodes(Math.floor(DB.length/2));
       console.log('File successfully uploaded:', response.data);
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -47,6 +50,11 @@ const FileUploader = ({ setDB, DB/* setPredictDB */ }) => {     //* FileUploader
       >
         <input {...getInputProps()} />
         <p className="text-center">{fileSelected ? <><span className='text-green-500 underline'>{fileName} </span><span>uploaded</span><span className='text-gray-400 '> {'('}click to select a different file{')'}</span></> : 'Drag & drop a CSV file here, or click to select one'}</p>
+        {/* {fileSelected && (
+          <p className="text-center mt-2">
+            Number of rows in the data: {maxLeafNodes}
+          </p>
+        )} */}
       </div>
     </>
   );

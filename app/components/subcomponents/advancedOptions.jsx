@@ -6,7 +6,7 @@ const AdvancedOptions = ({ settings, setSettings }) => {  //* AdvancedOptions co
           <details className='border border-gray-300 rounded-md shadow-sm'>
             <summary className='cursor-pointer p-2 bg-gray-200 rounded-md text-black'>Advanced Options</summary>
 
-            <div className='p-4 bg-gray-50'>
+            <div className='p-4 bg-gray-50 h-full'>
               <h3 className="font-semibold">Preprocessing</h3>
               <div className='flex w-fit items-center'>
                 <label htmlFor='imputer' className='block text-sm font-medium text-gray-700 mr-2'>Imputer</label>

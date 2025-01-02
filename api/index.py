@@ -31,10 +31,22 @@ def upload_file():
         return jsonify({"error": "No file selected"}), 400
 
     try:
-        global DF
+        global DF, max_leaf_nodes_possible
         DF = pd.read_csv(file)
         DF = DF.select_dtypes(exclude=['object'])       # Drop non-numeric columns
+
+    # #//TODO
+    #     max_leaf_nodes_possible = len(DF) // 2  # Calculate the maximum possible leaf nodes
+    #     print(f"Max leaf nodes possible: {max_leaf_nodes_possible}")
+        
+
+        # max_leaf_nodes_possible = len(DF) // 2  # Calculate the maximum possible leaf nodes
         return jsonify(DF.to_dict(orient="records"))    # Convert the DataFrame to a dictionary and return it as JSON 
+
+        # return jsonify({
+        #     "data": DF.to_dict(orient="records"),  # Convert the DataFrame to a dictionary and return it as JSON
+        #     "max_leaf_nodes_possible": max_leaf_nodes_possible
+        # })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -50,7 +62,12 @@ def train_model():
 
 @app.route('/api/train-tree', methods=['POST'])
 def train_tree():
-    print('working')
+    # def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
+    #     model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    #     model.fit(train_X, train_y)
+    #     preds_val = model.predict(val_X)
+    #     mae = mean_absolute_error(val_y, preds_val)
+    #     return(mae)    
 
     FE_data = request.json                        # Get the JSON data from the request
     global feat_cols, label_cols
@@ -74,7 +91,19 @@ def train_tree():
 
     #* TRAIN
     global tree_model
-    tree_model = DecisionTreeRegressor()
+    max_leaf_nodes = FE_data.get('settings')['tree']['maxLeafNodes']
+    if max_leaf_nodes is not None:
+        tree_model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    else:
+        tree_model = DecisionTreeRegressor(random_state=0)
+
+
+    #     tree : {
+    #   useRandomForest: false,
+    #   randomForest : {
+    #     maxLeafNodes: 10
+    #   }
+    # },
     tree_model.fit(X_train, y_train)
 
     #* COMPILATION
