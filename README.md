@@ -1,4 +1,4 @@
-Create a custom ML model with Gia! 
+Create a custom ML model with Gia.
 
 Upload your dataset, train your model, predict values.
 
