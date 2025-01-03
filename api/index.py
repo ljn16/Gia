@@ -88,7 +88,13 @@ def train_tree():
     #* TRAIN
     global tree_model
     max_leaf_nodes = FE_data.get('settings')['tree']['maxLeafNodes']
-    tree_model = DecisionTreeRegressor(max_leaf_nodes=int(max_leaf_nodes), random_state=0)
+    isRandomForest = FE_data.get('settings')['tree']['useRandomForest']
+
+    if isRandomForest:
+        tree_model = RandomForestRegressor(max_leaf_nodes=int(max_leaf_nodes), n_estimators=100, random_state=0)
+        # tree_model = DecisionTreeRegressor(max_leaf_nodes=int(max_leaf_nodes), random_state=0)
+    else:
+        tree_model = DecisionTreeRegressor(max_leaf_nodes=int(max_leaf_nodes), random_state=0)
 
 
     tree_model.fit(X_train, y_train)

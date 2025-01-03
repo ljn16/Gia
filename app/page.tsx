@@ -19,7 +19,7 @@ import Settings from "./components/subcomponents/Settings";
 export default function Home() {
 
   const [DB, setDB] = useState([]);
-  const [mlModel, setMlModel] = useState("neural_network");
+  const [mlModel, setMlModel] = useState("decision_tree");
   const [downloadedModel, setDownloadedModel] = useState(null);
   const [loss, setLoss] = useState(null);
   const [vars, setVars] = useState<string[]>([]);
@@ -34,7 +34,9 @@ export default function Home() {
       maxLeafNodes: 2,
       useRandomForest: false,
       randomForest : {
-
+        nEstimators: 100
+        // maxSamples: 0.5,
+        // maxFeatures: 0.5,
       }
     },
     //
@@ -93,7 +95,7 @@ export default function Home() {
           <>
             <div className="flex justify-center w-full h-full my-5 p-5 shadow-lg">
               <div className=''>
-                <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety} />
+                <FeatureSelector DB={DB} vars={vars} X={X} setX={setX} y={y} sety={sety}/>
                 
                 {X.length > 1 && y.length > 0 && (
                   <div className="w-full flex justify-center p-5">
@@ -103,7 +105,7 @@ export default function Home() {
                 )}
               </div>
 
-              <Settings settings={settings} setSettings={setSettings} mlModel={mlModel}/>
+              <Settings settings={settings} setSettings={setSettings} mlModel={mlModel} setMlModel={setMlModel}/>
               {/* <AdvancedOptions  settings={settings} setSettings={setSettings} /> */}
             </div>
 

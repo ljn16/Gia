@@ -22,7 +22,7 @@ const ModelSelector = ({setMlModel}) => {
                 options={options} 
                 placeholder='Select a Model Type' 
                 onChange={handleChange} 
-                defaultValue={options.find(option => option.value === 'neural_network')}
+                defaultValue={options.find(option => option.value === 'decision_tree')}
                 styles={{
                     option: (provided) => ({
                         ...provided,
