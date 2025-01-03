@@ -91,7 +91,7 @@ export default function Settings ({ settings, setSettings, mlModel, setMlModel }
 
                 {settings.tree.useRandomForest && (
                     <div className='flex w-fit items-center'>
-                        <label htmlFor='n_estimators' className='block text-sm font-medium text-gray-700 mr-2'>nEstimators</label>
+                        <label htmlFor='n_estimators' className='block text-sm font-medium text-gray-700 mr-2 ml-5'>nEstimators</label>
                         <input className='mt-1 block w-fit px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                             type='number'
                             id='n_estimators'

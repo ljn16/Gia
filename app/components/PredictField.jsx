@@ -49,7 +49,7 @@ export default function PredictField({ X, y, hasTrained }) {
         ))}
         <button
           type="submit"
-          className={`border text-white rounded p-1 ${X.length === 0 ? 'bg-gray-400' : 'bg-blue-500'}`}
+          className={`border text-white rounded p-1 ${X.length === 0 ? 'bg-gray-400' : 'bg-orange-400'}`}
           disabled={X.length === 0}
         >
           Predict {y}
@@ -57,8 +57,8 @@ export default function PredictField({ X, y, hasTrained }) {
       </form>
 
       {prediction !== null && (
-        <div>
-          <h3 className="">Predicted {y}: {parseFloat(prediction).toFixed(2)}</h3>
+        <div className="flex w-full justify-center">
+          <h3 className="mt-3">Predicted {y}: <span className='text-orange-400 font-bold'>{parseFloat(prediction).toFixed(2)}</span></h3>
         </div>
       )}
     </div>
