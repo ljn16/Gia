@@ -23,6 +23,14 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tailwindcss": "3.4.12",
-    "typescript": "5.6.2"
+    "typescript": "5.6.2",
+    "@tensorflow/tfjs": "^4.22.0",
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "papaparse": "^5.4.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dropzone": "^14.3.5",
+    "react-select": "^5.8.3",
+    "web-vitals": "^2.1.4"
   }
 }
