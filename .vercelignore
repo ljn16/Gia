@@ -1,0 +1,33 @@
+# Ignore node_modules
+node_modules
+
+# Ignore build directories
+dist
+build
+
+# Ignore logs
+logs
+*.log
+
+# Ignore temporary files
+tmp
+temp
+*.tmp
+
+# Ignore environment variables
+.env
+.env.local
+.env.*.local
+
+# Ignore Vercel configuration files
+.vercel
+
+# Ignore other common files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+*.bak
+*.orig
+*.lock
