@@ -18,6 +18,7 @@ temp
 .env
 .env.local
 .env.*.local
+venv/
 
 # Ignore Vercel configuration files
 .vercel
